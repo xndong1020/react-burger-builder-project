@@ -25,7 +25,6 @@ class BurgerBuilder extends Component {
   addIngredientHandler = type => {
     const oldCount = this.state.ingredients[type];
     const updatedCount = oldCount + 1;
-    console.log(oldCount);
     const updateIngredients = {
       ...this.state.ingredients
     };
@@ -39,13 +38,45 @@ class BurgerBuilder extends Component {
     });
   };
 
-  removeIngredientHandler = type => {};
+  removeIngredientHandler = type => {
+    const oldCount = this.state.ingredients[type];
+    // Prevent error if the ingredients is less than 0.
+    if (oldCount <= 0) return;
+    const updatedCount = oldCount - 1;
+    const updateIngredients = {
+      ...this.state.ingredients
+    };
+    updateIngredients[type] = updatedCount;
+    const priceAddition = INGREDIENT_PRICES[type];
+    const oldPrice = this.state.totalPrice;
+    const newPrice = oldPrice - priceAddition;
+    this.setState({
+      totalPrice: newPrice,
+      ingredients: updateIngredients
+    });
+  };
 
   render() {
+    // Disable the button if the ingredients is less than 0. disableInfo helps to identify if we need to disable the button or not.
+    const disableInfo = {
+      ...this.state.ingredients
+    };
+    // We need disableInfor[key]=true/false. this check here: disableInfo[key] <= 0 will turn to true or false.
+    for (let key in disableInfo) {
+      disableInfo[key] = disableInfo[key] <= 0;
+      console.log('disableInfo[key]', disableInfo[key]);
+      console.log('disableInfo', disableInfo);
+    }
+    // disableInfo example: {salad: false, bacon: true, cheese: false, meat: true}
+
     return (
       <Aux>
         <Burger ingredients={this.state.ingredients} />
-        <BuildControls ingredientAdded={this.addIngredientHandler} />
+        <BuildControls
+          ingredientAdded={this.addIngredientHandler}
+          ingredientRemoved={this.removeIngredientHandler}
+          disabled={disableInfo}
+        />
       </Aux>
     );
   }
