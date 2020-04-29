@@ -64,8 +64,6 @@ class BurgerBuilder extends Component {
     // We need disableInfor[key]=true/false. this check here: disableInfo[key] <= 0 will turn to true or false.
     for (let key in disableInfo) {
       disableInfo[key] = disableInfo[key] <= 0;
-      console.log('disableInfo[key]', disableInfo[key]);
-      console.log('disableInfo', disableInfo);
     }
     // disableInfo example: {salad: false, bacon: true, cheese: false, meat: true}
 
@@ -76,6 +74,7 @@ class BurgerBuilder extends Component {
           ingredientAdded={this.addIngredientHandler}
           ingredientRemoved={this.removeIngredientHandler}
           disabled={disableInfo}
+          price={this.state.totalPrice}
         />
       </Aux>
     );
