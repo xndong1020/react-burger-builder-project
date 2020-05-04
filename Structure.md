@@ -49,6 +49,17 @@ Using Google fonts - Open Sans (Regular 400 & Bold 700)
 
 Create two folders:
 
-#### Structure
+- Components:
+  1. Layout folder:
+     - Layout.jsx
+  2. Burger folder:
+     1. BurgerIngredient folder:
+        1. BurgerIngredient.jsx
+- Containers:
+  - BurgerBuilder folder:
+    - BurgerBuilder.jsx
 
-[Structure](./Structure.md)
+Then create a high order components folder:
+
+- hoc folder:
+  - Aux.jsx
