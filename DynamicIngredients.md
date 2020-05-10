@@ -63,7 +63,7 @@ Before using the spread:
 
 ```jsx
 const transformedIngredient = Object.keys(props.ingredients).map(igKey => {
-  return [...Array(props.ingredients[igKey])];
+  return Array(props.ingredients[igKey]);
 });
 console.log(transformedIngredient);
 ```
@@ -80,6 +80,21 @@ console.log(transformedIngredient);
 ```
 
 ![ingredientsConsole2](./docs/imgs/ingredientsConsole2.png)
+
+Without **Array()**: 
+
+```jsx
+  updatePurchaseState = ingredients => {
+    const sum = Object.keys(ingredients).map(igKey => ingredients[igKey]);
+    console.log(sum);
+  };
+```
+
+The output will only be an array of numbers.
+
+![console](./docs/imgs/console.png)
+
+Pay attention to the above 3 method. It gives you different result due to different situation.
 
 ```jsx
 // Burger.js

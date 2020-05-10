@@ -6,6 +6,7 @@ import BuildControls from '../../components/Burger/BuildControls/BuildControls';
 import Modal from '../../components/UI/Modal/Modal';
 import OrderSummary from '../../components/Burger/OrderSummary/OrderSummary';
 
+// This constant is created outside the class. I make the variable name all in caps with an _ in between each word because I want to make it a global const. It's also a JS object.
 const INGREDIENT_PRICES = {
   salad: 0.5,
   cheese: 0.4,

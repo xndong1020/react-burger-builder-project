@@ -20,6 +20,7 @@ const BuildControls = props => {
         <BuildControl
           key={ctrl.label}
           label={ctrl.label}
+          // We pass on ingredientAdded to the individual <BuildControl /> so that <BuildControl /> can call it. However, we also need to keep track of the type <BuildControl /> is, as well. So we can make the value of the added prop into a function in which we make a call to type via ctrl returned from .map().
           added={() => props.ingredientAdded(ctrl.type)}
           removed={() => props.ingredientRemoved(ctrl.type)}
           disabled={props.disabled[ctrl.type]}
