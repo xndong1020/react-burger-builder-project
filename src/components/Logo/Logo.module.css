@@ -1,3 +1,4 @@
+/* We need to adjust the Logo styling for mobile. So in SideDrawer.js, we will wrap <Logo /> with a div. The same in Toolbar.js. We need these divs because we are going to add CSS classes there. This is an alternative to adding a height property to Logo in SideDrawer.js and Toolbar.js. I personally like the CSS classes approach better. We can have a .Logo class in three different places because of CSS Modules local scope feature. */
 .Logo {
   background-color: #fff;
   padding: 8px;
