@@ -8,15 +8,15 @@ import Aux from '../../../hoc/Aux/Aux';
 
 // SideDrawer is Navigation for mobile devices.
 const SideDrawer = props => {
-  let attachedClassed = [classes.SideDrawer, classes.Close];
+  let attachedClasses = [classes.SideDrawer, classes.Close];
   if (props.open) {
-    attachedClassed = [classes.SideDrawer, classes.Open];
+    attachedClasses = [classes.SideDrawer, classes.Open];
   }
   return (
     <Aux>
       {/* The backdrop property needs to be true to display it. We can simply add show property without assign any values because it is a boolean. If it is true, it will display. If it is not, it will not.*/}
       <Backdrop show={props.open} clicked={props.closed} />
-      <div className={attachedClassed.join(' ')}>
+      <div className={attachedClasses.join(' ')}>
         <div className={classes.Logo}>
           <Logo />
         </div>
