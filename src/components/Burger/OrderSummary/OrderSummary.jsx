@@ -4,7 +4,7 @@ import Aux from '../../../hoc/Aux/Aux';
 import Button from '../../UI/Button/Button';
 
 class OrderSummary extends Component {
-  // This could be a functional component, doesn'thave to be a class
+  // This could be a functional component, doesn't have to be a class
   componentWillUpdate() {
     console.log('[OrderSummary] WillUpdate');
   }
@@ -23,7 +23,7 @@ class OrderSummary extends Component {
         <p>A delicious burger with the following ingredients:</p>
         <ul>{ingredientSummary}</ul>
         <p>
-          <strong>Total Price: {this.props.price}</strong>
+          <strong>Total Price: ${this.props.price.toFixed(2)}</strong>
         </p>
         <p>Continue to Checkout?</p>
         <Button btnType="Danger" clicked={this.props.purchaseCancelled}>

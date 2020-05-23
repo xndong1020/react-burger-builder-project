@@ -5,6 +5,8 @@ import Burger from '../../components/Burger/Burger';
 import BuildControls from '../../components/Burger/BuildControls/BuildControls';
 import Modal from '../../components/UI/Modal/Modal';
 import OrderSummary from '../../components/Burger/OrderSummary/OrderSummary';
+import Spinner from '../../components/UI/Spinner/Spinner';
+import axios from '../../axios-orders';
 
 // This constant is created outside the class. I make the variable name all in caps with an _ in between each word because I want to make it a global const. It's also a JS object.
 const INGREDIENT_PRICES = {
@@ -24,7 +26,8 @@ class BurgerBuilder extends Component {
     },
     totalPrice: 4,
     purchasable: false,
-    purchasing: false
+    purchasing: false,
+    loading: false
   };
 
   updatePurchaseState(ingredients) {
@@ -83,7 +86,38 @@ class BurgerBuilder extends Component {
   };
 
   purchaseContinueHandler = () => {
-    alert('You continue!');
+    this.setState({
+      loading: true
+    });
+    // alert('You continue!');
+    const order = {
+      ingredients: this.state.ingredients,
+      price: this.state.totalPrice,
+      customer: {
+        name: 'Nicole Dong',
+        address: {
+          street: 'Teststreet 1',
+          zipCode: '2121',
+          country: 'Australia'
+        },
+        email: 'test@test.com'
+      },
+      deliveryMethod: 'fastest'
+    };
+    axios
+      .post('/orders.json', order)
+      .then(response =>
+        this.setState({
+          loading: false,
+          purchasing: false
+        })
+      )
+      .catch(error =>
+        this.setState({
+          loading: false,
+          purchasing: false
+        })
+      );
   };
 
   render() {
@@ -91,11 +125,22 @@ class BurgerBuilder extends Component {
     const disableInfo = {
       ...this.state.ingredients
     };
-    // We need disableInfor[key]=true/false. this check here: disableInfo[key] <= 0 will turn to true or false.
+    // We need disableInfo[key]=true/false. this check here: disableInfo[key] <= 0 will turn to true or false.
     for (let key in disableInfo) {
       disableInfo[key] = disableInfo[key] <= 0;
     }
     // disableInfo example: {salad: false, bacon: true, cheese: false, meat: true}
+    let orderSummary = (
+      <OrderSummary
+        ingredients={this.state.ingredients}
+        price={this.state.totalPrice}
+        purchaseCancelled={this.purchaseCancelHandler}
+        purchaseContinued={this.purchaseContinueHandler}
+      />
+    );
+    if (this.state.loading) {
+      orderSummary = <Spinner />;
+    }
 
     return (
       <Aux>
@@ -103,12 +148,7 @@ class BurgerBuilder extends Component {
           show={this.state.purchasing}
           modalClosed={this.purchaseCancelHandler}
         >
-          <OrderSummary
-            ingredients={this.state.ingredients}
-            price={this.state.totalPrice}
-            purchaseCancelled={this.purchaseCancelHandler}
-            purchaseContinued={this.purchaseContinueHandler}
-          />
+          {orderSummary}
         </Modal>
         <Burger ingredients={this.state.ingredients} />
         <BuildControls
