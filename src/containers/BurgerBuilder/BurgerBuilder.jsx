@@ -6,6 +6,7 @@ import BuildControls from '../../components/Burger/BuildControls/BuildControls';
 import Modal from '../../components/UI/Modal/Modal';
 import OrderSummary from '../../components/Burger/OrderSummary/OrderSummary';
 import Spinner from '../../components/UI/Spinner/Spinner';
+import withErrorHandler from '../../components/withErrorHandler/withErrorHandler';
 import axios from '../../axios-orders';
 
 // This constant is created outside the class. I make the variable name all in caps with an _ in between each word because I want to make it a global const. It's also a JS object.
@@ -105,7 +106,7 @@ class BurgerBuilder extends Component {
       deliveryMethod: 'fastest'
     };
     axios
-      .post('/orders.json', order)
+      .post('/orders', order)
       .then(response =>
         this.setState({
           loading: false,
@@ -164,4 +165,4 @@ class BurgerBuilder extends Component {
   }
 }
 
-export default BurgerBuilder;
+export default withErrorHandler(BurgerBuilder, axios);
