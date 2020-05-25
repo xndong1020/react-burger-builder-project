@@ -40,6 +40,7 @@ const withErrorHandler = (WrappedComponent, axios) => {
           >
             {this.state.error ? this.state.error.message : null}
           </Modal>
+          {/* The props are from the parent component of BurgerBuilder in this case. We don't know what they are but we don't want to lose them. If we don't pass them in then any props from the parent component of BB will be swallowed here and will be not passed to BB. */}
           <WrappedComponent {...this.props} />
         </Aux>
       );
