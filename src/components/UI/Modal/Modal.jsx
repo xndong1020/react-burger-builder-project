@@ -12,7 +12,7 @@ class Modal extends Component {
     // The above if statement can be shortened by below
     return (
       nextProps.show !== this.props.show ||
-      nextProps.children != this.props.children
+      nextProps.children !== this.props.children
     );
   }
 
