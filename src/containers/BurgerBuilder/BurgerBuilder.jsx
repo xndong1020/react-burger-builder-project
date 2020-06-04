@@ -128,8 +128,20 @@ class BurgerBuilder extends Component {
     //     })
     //   );
 
+    const queryParam = [];
+    for (let i in this.state.ingredients) {
+      queryParam.push(
+        encodeURIComponent(i) +
+          '=' +
+          encodeURIComponent(this.state.ingredients[i])
+      );
+    }
+    const queryString = queryParam.join('&');
     // This push prop which allows us to basically switch the page and push a new page onto that stack of pages.
-    this.props.history.push('/checkout');
+    this.props.history.push({
+      pathname: '/checkout',
+      search: '?' + queryString
+    });
   };
 
   render() {
