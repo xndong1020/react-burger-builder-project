@@ -26,6 +26,15 @@ class BurgerBuilder extends Component {
     loading: false,
     error: false
   };
+  // The goal is to initialize our ingredients in the state with the ingredients we stored on Firebase.
+  // Before:
+  //          state = {
+  //                    salad: 0,
+  //                    bacon: 0,
+  //                    cheese: 0,
+  //                    meat: 0
+  //                  };
+  // Now: state = {ingredients: null}
 
   componentDidMount() {
     console.log(this.props);
@@ -97,6 +106,7 @@ class BurgerBuilder extends Component {
   purchaseContinueHandler = () => {
     // alert('You continue!');
 
+    // Passing ingredients via query params to the URL
     const queryParams = [];
     for (let i in this.state.ingredients) {
       queryParams.push(

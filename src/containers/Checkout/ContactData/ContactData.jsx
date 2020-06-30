@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+// import { withRouter } from 'react-router-dom';
 
 import Button from '../../../components/UI/Button/Button';
 import Spinner from '../../../components/UI/Spinner/Spinner';
@@ -17,8 +18,10 @@ class ContactData extends Component {
   };
 
   orderHandler = event => {
-    // Because it is in a form, we need to add the preventDefault, otherwise it will just reload the page.
+    // This orderHandler is used on the button, and this button is inside a form. The default behavior is to send the request which reloads my form.
+    // we don't want to send the request so we need to add the preventDefault, otherwise it will just reload the page.
     event.preventDefault();
+    // Before adding the event.preventDefault(); the below clg shows nothing. After added, clg shows the right ingredients.
     console.log(this.props.ingredients);
     this.setState({
       loading: true
@@ -43,6 +46,7 @@ class ContactData extends Component {
         this.setState({
           loading: false
         });
+        // Use history.push method to redirect back to the root page. But there is no "history" object in the contactData page. So we need to pass it from Checkout.jsx. Or with withRouter to wrap the ContactData component.
         this.props.history.push('/');
       })
       .catch(error =>
@@ -79,6 +83,7 @@ class ContactData extends Component {
           name="postal"
           placeholder="Postal Code"
         />
+        {/* Use orderHandler to make sure that when we click this button here, we do actually submit our order. */}
         <Button btnType="Success" clicked={this.orderHandler}>
           ORDER
         </Button>
@@ -97,3 +102,4 @@ class ContactData extends Component {
 }
 
 export default ContactData;
+// export default withRouter(ContactData);
