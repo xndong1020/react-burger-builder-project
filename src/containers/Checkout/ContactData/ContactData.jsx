@@ -85,7 +85,7 @@ class ContactData extends Component {
             { value: 'cheapest', displayValue: 'Cheapest' }
           ]
         },
-        value: '',
+        value: 'fastest',
         // Doesn't need validation here. But if we don't give a validation property, an error will occur. So we simple add an empty validation object here to fix the error.
         validation: {},
         valid: true
