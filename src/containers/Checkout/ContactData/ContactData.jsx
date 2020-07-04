@@ -86,6 +86,8 @@ class ContactData extends Component {
           ]
         },
         value: '',
+        // Doesn't need validation here. But if we don't give a validation property, an error will occur. So we simple add an empty validation object here to fix the error.
+        validation: {},
         valid: true
       }
     },
@@ -132,6 +134,11 @@ class ContactData extends Component {
 
   checkValidity(value, rules) {
     let isValid = true;
+
+    // This is also used to prevent the error of no validation object for the delivery. We can use either one or both for double security. But adding the empty validation object is better approach because that make all controls configured equally.
+    if (!rules) {
+      return true;
+    }
 
     if (rules.required) {
       isValid = value.trim() !== '' && isValid;
