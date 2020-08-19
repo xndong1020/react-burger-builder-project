@@ -1,22 +1,22 @@
-import React, { Component } from "react";
-import { connect } from "react-redux";
+import React, { Component } from 'react'
+import { connect } from 'react-redux'
 
-import Aux from "../../hoc/Aux/Aux";
-import Burger from "../../components/Burger/Burger";
-import BuildControls from "../../components/Burger/BuildControls/BuildControls";
-import Modal from "../../components/UI/Modal/Modal";
-import OrderSummary from "../../components/Burger/OrderSummary/OrderSummary";
-import Spinner from "../../components/UI/Spinner/Spinner";
-import withErrorHandler from "../../components/withErrorHandler/withErrorHandler";
-import axios from "../../axios-orders";
-import * as actionTypes from "../../store/action";
+import Aux from '../../hoc/Aux/Aux'
+import Burger from '../../components/Burger/Burger'
+import BuildControls from '../../components/Burger/BuildControls/BuildControls'
+import Modal from '../../components/UI/Modal/Modal'
+import OrderSummary from '../../components/Burger/OrderSummary/OrderSummary'
+import Spinner from '../../components/UI/Spinner/Spinner'
+import withErrorHandler from '../../components/withErrorHandler/withErrorHandler'
+import axios from '../../axios-orders'
+import * as actionTypes from '../../store/action'
 
 class BurgerBuilder extends Component {
   state = {
     purchasing: false,
     loading: false,
-    error: false,
-  };
+    error: false
+  }
   // The goal is to initialize our ingredients in the state with the ingredients we stored on Firebase.
   // Before:
   //          state = {
@@ -28,7 +28,7 @@ class BurgerBuilder extends Component {
   // Now: state = {ingredients: null}
 
   componentDidMount() {
-    console.log(this.props);
+    console.log(this.props)
     // axios
     //   .get('https://react-my-burger-b5370.firebaseio.com/ingredients.json')
     //   .then(response => {
@@ -41,62 +41,48 @@ class BurgerBuilder extends Component {
 
   updatePurchaseState(ingredients) {
     const sum = Object.keys(ingredients)
-      .map((igKey) => {
-        return ingredients[igKey];
+      .map(igKey => {
+        return ingredients[igKey]
       })
       .reduce((accu, el) => {
-        return accu + el;
-      }, 0);
-    return sum > 0;
+        return accu + el
+      }, 0)
+    return sum > 0
   }
 
   purchaseHandler = () => {
-    this.setState({ purchasing: true });
-  };
+    this.setState({ purchasing: true })
+  }
 
   purchaseCancelHandler = () => {
-    this.setState({ purchasing: false });
-  };
+    this.setState({ purchasing: false })
+  }
 
+  // Can get rid of this method as we want to use redux to manage Checkout & ContactData Containter.
   purchaseContinueHandler = () => {
-    // alert('You continue!');
-    const { ings } = this.props;
-    // Passing ingredients via query params to the URL
-    const queryParams = [];
-    for (let i in ings) {
-      queryParams.push(
-        encodeURIComponent(i) + "=" + encodeURIComponent(ings[i])
-      );
-    }
-    queryParams.push("price=" + this.state.totalPrice);
-    const queryString = queryParams.join("&");
-    // This push prop which allows us to basically switch the page and push a new page onto that stack of pages.
-    this.props.history.push({
-      pathname: "/checkout",
-      search: "?" + queryString,
-    });
-  };
+    this.props.history.push('/checkout')
+  }
 
   render() {
-    const { ings, price } = this.props;
+    const { ings, price } = this.props
 
     // Disable the button if the ingredients is less than 0. disableInfo helps to identify if we need to disable the button or not.
     const disableInfo = {
-      ...ings,
-    };
+      ...ings
+    }
     // We need disableInfo[key]=true/false. this check here: disableInfo[key] <= 0 will turn to true or false.
     for (let key in disableInfo) {
-      disableInfo[key] = disableInfo[key] <= 0;
+      disableInfo[key] = disableInfo[key] <= 0
     }
     // disableInfo example: {salad: false, bacon: true, cheese: false, meat: true}
 
-    let orderSummary = null;
+    let orderSummary = null
 
     let burger = this.state.error ? (
       <p>Ingredients can't be loaded!</p>
     ) : (
       <Spinner />
-    );
+    )
 
     if (ings) {
       burger = (
@@ -111,7 +97,7 @@ class BurgerBuilder extends Component {
             price={price}
           />
         </Aux>
-      );
+      )
       orderSummary = (
         <OrderSummary
           ingredients={ings}
@@ -119,11 +105,11 @@ class BurgerBuilder extends Component {
           purchaseCancelled={this.purchaseCancelHandler}
           purchaseContinued={this.purchaseContinueHandler}
         />
-      );
+      )
     }
 
     if (this.state.loading) {
-      orderSummary = <Spinner />;
+      orderSummary = <Spinner />
     }
 
     return (
@@ -136,30 +122,30 @@ class BurgerBuilder extends Component {
         </Modal>
         {burger}
       </Aux>
-    );
+    )
   }
 }
 
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
   return {
     ings: state.ingredients,
-    price: state.totalPrice,
-  };
-};
+    price: state.totalPrice
+  }
+}
 
-const mapDispatchToProps = (dispatch) => {
+const mapDispatchToProps = dispatch => {
   return {
-    onIngredientAdded: (ingName) =>
+    onIngredientAdded: ingName =>
       dispatch({ type: actionTypes.ADD_INGREDIENT, ingredientName: ingName }),
-    onIngredientRemoved: (ingName) =>
+    onIngredientRemoved: ingName =>
       dispatch({
         type: actionTypes.REMOVE_INGREDIENT,
-        ingredientName: ingName,
-      }),
-  };
-};
+        ingredientName: ingName
+      })
+  }
+}
 
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(withErrorHandler(BurgerBuilder, axios));
+)(withErrorHandler(BurgerBuilder, axios))

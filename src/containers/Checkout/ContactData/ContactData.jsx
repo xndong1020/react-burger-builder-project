@@ -1,11 +1,12 @@
-import React, { Component } from 'react';
+import React, { Component } from 'react'
+import { connect } from 'react-redux'
 // import { withRouter } from 'react-router-dom';
 
-import Button from '../../../components/UI/Button/Button';
-import Spinner from '../../../components/UI/Spinner/Spinner';
-import classes from './ContactData.module.css';
-import axios from '../../../axios-orders';
-import Input from '../../../components/UI/Input/Input';
+import Button from '../../../components/UI/Button/Button'
+import Spinner from '../../../components/UI/Spinner/Spinner'
+import classes from './ContactData.module.css'
+import axios from '../../../axios-orders'
+import Input from '../../../components/UI/Input/Input'
 
 class ContactData extends Component {
   state = {
@@ -93,97 +94,97 @@ class ContactData extends Component {
     },
     formIsValid: false,
     loading: false
-  };
+  }
 
   orderHandler = event => {
     // This orderHandler is used on the button, and this button is inside a form. The default behavior is to send the request which reloads my form.
     // we don't want to send the request so we need to add the preventDefault, otherwise it will just reload the page.
-    event.preventDefault();
+    event.preventDefault()
     // Before adding the event.preventDefault(); the below clg shows nothing. After added, clg shows the right ingredients.
-    console.log(this.props.ingredients);
+    console.log(this.props.ings)
     this.setState({
       loading: true
-    });
-    const formData = {};
+    })
+    const formData = {}
     for (let formElementIdentifier in this.state.orderForm) {
       formData[formElementIdentifier] = this.state.orderForm[
         formElementIdentifier
-      ].value;
+      ].value
     }
 
     const order = {
-      ingredients: this.props.ingredients,
+      ingredients: this.props.ings,
       price: this.props.price,
       orderData: formData
-    };
+    }
     axios
       .post('/orders.json', order)
       .then(response => {
         this.setState({
           loading: false
-        });
+        })
         // Use history.push method to redirect back to the root page. But there is no "history" object in the contactData page. So we need to pass it from Checkout.jsx. Or with withRouter to wrap the ContactData component.
-        this.props.history.push('/');
+        this.props.history.push('/')
       })
       .catch(error =>
         this.setState({
           loading: false
         })
-      );
-  };
+      )
+  }
 
   checkValidity(value, rules) {
-    let isValid = true;
+    let isValid = true
 
     // This is also used to prevent the error of no validation object for the delivery. We can use either one or both for double security. But adding the empty validation object is better approach because that make all controls configured equally.
     if (!rules) {
-      return true;
+      return true
     }
 
     if (rules.required) {
-      isValid = value.trim() !== '' && isValid;
+      isValid = value.trim() !== '' && isValid
     }
 
     if (rules.minLength) {
-      isValid = value.length >= rules.minLength && isValid;
+      isValid = value.length >= rules.minLength && isValid
     }
 
     if (rules.maxLength) {
-      isValid = value.length <= rules.maxLength && isValid;
+      isValid = value.length <= rules.maxLength && isValid
     }
 
-    return isValid;
+    return isValid
   }
 
   // inputIdentifier is the key in the state, orderForm. such as "name", "email", "country" etc.
   inputChangedHandler = (event, inputIdentifier) => {
     const updatedOrderForm = {
       ...this.state.orderForm
-    };
-    const updatedFormElement = { ...updatedOrderForm[inputIdentifier] };
-    updatedFormElement.value = event.target.value;
+    }
+    const updatedFormElement = { ...updatedOrderForm[inputIdentifier] }
+    updatedFormElement.value = event.target.value
     updatedFormElement.valid = this.checkValidity(
       updatedFormElement.value,
       updatedFormElement.validation
-    );
-    updatedFormElement.touched = true;
-    updatedOrderForm[inputIdentifier] = updatedFormElement;
+    )
+    updatedFormElement.touched = true
+    updatedOrderForm[inputIdentifier] = updatedFormElement
 
-    let formIsValid = true;
+    let formIsValid = true
     for (let inputIdentifier in updatedOrderForm) {
-      formIsValid = updatedOrderForm[inputIdentifier].valid && formIsValid;
+      formIsValid = updatedOrderForm[inputIdentifier].valid && formIsValid
     }
-    console.log(formIsValid);
-    this.setState({ orderForm: updatedOrderForm, formIsValid: formIsValid });
-  };
+    console.log(formIsValid)
+    this.setState({ orderForm: updatedOrderForm, formIsValid: formIsValid })
+  }
 
   render() {
-    const formElementsArray = [];
+    const formElementsArray = []
     for (let key in this.state.orderForm) {
       formElementsArray.push({
         id: key,
         config: this.state.orderForm[key]
-      });
+      })
     }
     let form = (
       <form onSubmit={this.orderHandler}>
@@ -200,22 +201,29 @@ class ContactData extends Component {
           />
         ))}
         {/* Use orderHandler to make sure that when we click this button here, we do actually submit our order. */}
-        <Button btnType="Success" disabled={!this.state.formIsValid}>
+        <Button btnType='Success' disabled={!this.state.formIsValid}>
           ORDER
         </Button>
       </form>
-    );
+    )
     if (this.state.loading) {
-      form = <Spinner />;
+      form = <Spinner />
     }
     return (
       <div className={classes.ContactData}>
         <h4>Enter your Contact Data</h4>
         {form}
       </div>
-    );
+    )
   }
 }
 
-export default ContactData;
+const mapStateToProps = state => {
+  return {
+    ings: state.ingredients,
+    price: state.totalPrice
+  }
+}
+
+export default connect(mapStateToProps)(ContactData)
 // export default withRouter(ContactData);
