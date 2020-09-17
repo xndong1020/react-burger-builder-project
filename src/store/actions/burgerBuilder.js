@@ -29,7 +29,7 @@ export const fetchIngrdientsFailed = () => {
     }
 }
 
-export const initIngredient = () => {
+export const initIngredients = () => {
     return dispatch => {
         axios
             .get('https://react-my-burger-b5370.firebaseio.com/ingredients.json')
