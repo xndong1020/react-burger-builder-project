@@ -7,6 +7,8 @@ import Spinner from '../../../components/UI/Spinner/Spinner'
 import classes from './ContactData.module.css'
 import axios from '../../../axios-orders'
 import Input from '../../../components/UI/Input/Input'
+import withErrorHandler from '../../../components/withErrorHandler/withErrorHandler'
+import * as actions from '../../../store/actions/index'
 
 class ContactData extends Component {
   state = {
@@ -101,10 +103,7 @@ class ContactData extends Component {
     // we don't want to send the request so we need to add the preventDefault, otherwise it will just reload the page.
     event.preventDefault()
     // Before adding the event.preventDefault(); the below clg shows nothing. After added, clg shows the right ingredients.
-    console.log(this.props.ings)
-    this.setState({
-      loading: true
-    })
+
     const formData = {}
     for (let formElementIdentifier in this.state.orderForm) {
       formData[formElementIdentifier] = this.state.orderForm[
@@ -117,20 +116,8 @@ class ContactData extends Component {
       price: this.props.price,
       orderData: formData
     }
-    axios
-      .post('/orders.json', order)
-      .then(response => {
-        this.setState({
-          loading: false
-        })
-        // Use history.push method to redirect back to the root page. But there is no "history" object in the contactData page. So we need to pass it from Checkout.jsx. Or with withRouter to wrap the ContactData component.
-        this.props.history.push('/')
-      })
-      .catch(error =>
-        this.setState({
-          loading: false
-        })
-      )
+
+    this.props.onOrderBurger(order)
   }
 
   checkValidity(value, rules) {
@@ -225,5 +212,14 @@ const mapStateToProps = state => {
   }
 }
 
-export default connect(mapStateToProps)(ContactData)
+const mapDispatchToProps = dispatch => {
+  return {
+    onOrderBurger: orderData => dispatch(actions.purchaseBurgerStart(orderData))
+  }
+}
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(withErrorHandler(ContactData))
 // export default withRouter(ContactData);
